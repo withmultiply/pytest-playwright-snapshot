@@ -23,7 +23,7 @@ def assert_snapshot(pytestconfig: Any, request: Any, browser_name: str) -> Calla
             file.write_bytes(img)
             return
         if not file.exists():
-            pytest.fail("Snapshot not found, use --update-snapshots to update it.")
+            pytest.fail(f"Snapshot not found in {filepath}/{name}, use --update-snapshots to update it.")
         image = Image.open(BytesIO(img))
         golden = Image.open(file)
         diff_pixels = pixelmatch(image, golden, threshold=threshold)
