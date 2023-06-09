@@ -13,17 +13,17 @@ def assert_snapshot(pytestconfig: Any, request: Any, browser_name: str) -> Calla
     def compare(img: bytes, name: str, *, threshold: float = 0.1) -> None:
         update_snapshot = pytestconfig.getoption("--update-snapshots")
         filepath = (
-            Path(request.node.fspath).parent.resolve()
-            / "__snapshots__"
-            / browser_name
+            Path(request.node.fspath).parent.resolve() / "__snapshots__" / browser_name
         )
         filepath.mkdir(parents=True, exist_ok=True)
         file = filepath / name
-        if update_snapshot:
+        if update_snapshot or not file.exists():
             file.write_bytes(img)
             return
         if not file.exists():
-            pytest.fail(f"Snapshot not found in {filepath}/{name}, use --update-snapshots to update it.")
+            pytest.fail(
+                f"Snapshot not found in {filepath}/{name}, use --update-snapshots to update it."
+            )
         image = Image.open(BytesIO(img))
         golden = Image.open(file)
         diff_pixels = pixelmatch(image, golden, threshold=threshold)
