@@ -18,19 +18,12 @@ def test_snapshot_create(browser_name: str, testdir: pytest.Testdir) -> None:
     """
     )
     filepath = (
-        Path(testdir.tmpdir)
-        / "__snapshots__"
-        / browser_name
-        / sys.platform
-        / "test-snapshot.png"
+        Path(testdir.tmpdir) / "__snapshots__" / browser_name / "test-snapshot.png"
     ).resolve()
 
     result = testdir.runpytest("--browser", browser_name)
-    result.assert_outcomes(failed=1)
-    assert "Snapshot not found, use --update-snapshots to update it." in "".join(
-        result.outlines
-    )
-    assert not filepath.exists()
+    result.assert_outcomes(passed=1)
+    assert filepath.exists()
 
     result = testdir.runpytest("--browser", browser_name, "--update-snapshots")
     result.assert_outcomes(passed=1)
@@ -51,11 +44,7 @@ def test_snapshot_fail(browser_name: str, testdir: pytest.Testdir) -> None:
     """
     )
     filepath = (
-        Path(testdir.tmpdir)
-        / "__snapshots__"
-        / browser_name
-        / sys.platform
-        / "test-snapshot.png"
+        Path(testdir.tmpdir) / "__snapshots__" / browser_name / "test-snapshot.png"
     ).resolve()
 
     result = testdir.runpytest("--browser", browser_name, "--update-snapshots")
