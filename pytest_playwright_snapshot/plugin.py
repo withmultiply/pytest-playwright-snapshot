@@ -16,6 +16,7 @@ def assert_snapshot(pytestconfig: Any, request: Any, browser_name: str) -> Calla
             Path(request.node.fspath).parent.resolve()
             / "__snapshots__"
             / browser_name
+            / sys.platform
         )
         filepath.mkdir(parents=True, exist_ok=True)
         file = filepath / name
